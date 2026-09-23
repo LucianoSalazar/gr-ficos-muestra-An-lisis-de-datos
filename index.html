@@ -3,380 +3,666 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Providencia vs Recoleta — Gráficos</title>
+<title>Providencia y Recoleta — Visualizaciones 2022</title>
 <style>
 :root{
-  --bg:#071221; --bg2:#10345e; --paper:#f8f4ec; --ink:#111927; --muted:#6f7b8d;
-  --prov:#0a84ff; --prov2:#63c2ff; --exec:#8cddff; --rec:#e53935; --rec2:#ff7b70;
-  --gold:#ffc857; --line:#dfe6ef; --card:#ffffff; --dark:#0e2037;
+  --ink:#171a1f;
+  --muted:#66707a;
+  --line:#e2e7eb;
+  --paper:#ffffff;
+  --page:#f7f9fb;
+  --prov:#0b68c9;
+  --prov2:#42a9eb;
+  --rec:#d83a43;
+  --rec2:#ef756f;
+  --gold:#d89d1c;
+  --soft-blue:#eef6fc;
+  --soft-red:#fdf1f1;
 }
 *{box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{
   margin:0;
-  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-  color:#fff;
+  font-family:"Helvetica Neue",Arial,Helvetica,sans-serif;
+  color:var(--ink);
   background:
-    radial-gradient(circle at 10% 10%, rgba(10,132,255,.22), transparent 28%),
-    radial-gradient(circle at 92% 10%, rgba(229,57,53,.16), transparent 24%),
-    linear-gradient(145deg,#06111f,#0b1d34 50%, #071221);
+    linear-gradient(90deg,rgba(11,104,201,.045),transparent 17%,transparent 83%,rgba(216,58,67,.045)),
+    #fff;
 }
-.wrap{max-width:1200px;margin:auto;padding:24px 18px 40px}
-.hero{
-  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
-  border:1px solid rgba(255,255,255,.12);
-  border-radius:28px;
-  padding:24px;
-  box-shadow:0 20px 60px rgba(0,0,0,.30);
+.topline{
+  height:5px;
+  background:linear-gradient(90deg,var(--prov) 0 49%,#eceff2 49% 51%,var(--rec) 51% 100%);
 }
-.kicker{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:#a9d0ff}
-h1{
-  margin:10px 0 10px;
-  font-size:clamp(34px,5vw,68px);
-  line-height:.94;letter-spacing:-.05em
+.page{
+  width:min(1080px,calc(100% - 28px));
+  margin:0 auto;
+  padding:38px 0 72px;
 }
-.provT{color:var(--prov2)} .recT{color:var(--rec2)}
-.sub{max-width:760px;font-size:16px;color:#d5e1f4;line-height:1.45}
-.nav{
-  display:flex;gap:10px;flex-wrap:wrap;margin-top:18px
+.header{
+  padding:0 0 22px;
+  margin-bottom:10px;
 }
-.nav a,.nav button{
-  text-decoration:none;border:0;border-radius:999px;padding:12px 16px;font-weight:900;font-size:14px;cursor:pointer
+.header .eyebrow{
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:#7b858f;
 }
-.btn1{background:linear-gradient(90deg,var(--prov),var(--prov2));color:#fff}
-.btn2{background:linear-gradient(90deg,var(--rec),var(--rec2));color:#fff}
-.btn3{background:rgba(255,255,255,.09);color:#fff;border:1px solid rgba(255,255,255,.14)}
-.section{
-  margin-top:18px;background:var(--paper);color:var(--ink);border-radius:30px;padding:22px;
-  box-shadow:0 30px 80px rgba(0,0,0,.34)
+.header h1{
+  margin:8px 0 5px;
+  font-size:clamp(30px,4.8vw,58px);
+  line-height:.98;
+  letter-spacing:-.045em;
+  font-weight:800;
 }
-.card{
-  background:var(--card);border:1px solid var(--line);border-radius:26px;padding:18px;position:relative;overflow:hidden
+.header p{
+  margin:0;
+  color:var(--muted);
+  font-size:14px;
 }
-.card + .card{margin-top:18px}
-.card:before{
-  content:"";position:absolute;right:-70px;top:-70px;width:220px;height:220px;border-radius:50%;
-  background:radial-gradient(circle, rgba(10,132,255,.10), transparent 70%);
+.chart{
+  padding:34px 0 38px;
+  border-top:1px solid var(--line);
 }
-.card.recGlow:before{background:radial-gradient(circle, rgba(229,57,53,.09), transparent 70%)}
-.top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
-.label{font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:900;color:#7a889b}
-h2{margin:6px 0 0;font-size:clamp(24px,3vw,40px);line-height:1.02;letter-spacing:-.04em}
-.tag{background:#edf5ff;color:#24435f;border-radius:999px;padding:10px 14px;font-size:12px;font-weight:900;text-transform:uppercase}
-.small{margin-top:6px;font-size:14px;color:var(--muted)}
-.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
-.controls button{
-  border:0;border-radius:999px;padding:11px 14px;font-weight:900;font-size:13px;cursor:pointer
+.chart-head{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  align-items:flex-start;
+  flex-wrap:wrap;
+  margin-bottom:24px;
 }
-.controls .play{background:#10233c;color:#fff}
-.controls .alt{background:#eef4fb;color:#17304d}
-.rows{display:grid;gap:18px;margin-top:18px}
-.row{display:grid;grid-template-columns:210px 1fr 145px;align-items:center;gap:14px}
-.name{font-size:15px;font-weight:900;color:#20344b;line-height:1.2}
-.track{height:58px;border-radius:18px;background:#edf3f9;border:1px solid #e1e8f0;overflow:hidden}
-.fill{
-  height:100%;width:0;border-radius:18px;transition:width 1.3s cubic-bezier(.2,.9,.2,1);
-  box-shadow:0 12px 24px rgba(12,28,53,.14), inset 0 1px 0 rgba(255,255,255,.28);
-  position:relative
+.chart-kicker{
+  font-size:11px;
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.11em;
+  color:#7a848d;
+  margin-bottom:6px;
 }
-.prov{background:linear-gradient(90deg,var(--prov),var(--prov2))}
-.exec{background:linear-gradient(90deg,#3ca7ff,#9ae0ff)}
-.reco{background:linear-gradient(90deg,var(--rec),var(--rec2))}
-.inVal{
-  position:absolute;right:14px;top:50%;transform:translateY(-50%);
-  color:#fff;font-size:clamp(14px,1.8vw,24px);font-weight:950;letter-spacing:-.04em;
-  opacity:0;transition:opacity .35s ease .15s;text-shadow:0 2px 8px rgba(0,0,0,.25)
+.chart h2{
+  margin:0;
+  font-size:clamp(24px,3.4vw,38px);
+  line-height:1.04;
+  letter-spacing:-.035em;
 }
-.fill.show .inVal{opacity:1}
-.outVal{font-size:clamp(18px,2vw,30px);font-weight:950;letter-spacing:-.04em;text-align:right}
-.finding{
-  margin-top:18px;border-radius:22px;padding:16px 18px;background:var(--dark);color:#fff;
-  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap
+.chart-note{
+  margin-top:7px;
+  font-size:13px;
+  color:var(--muted);
 }
-.finding .t{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#a7bdd7;font-weight:900}
-.finding .big{font-size:clamp(32px,4.2vw,56px);font-weight:950;letter-spacing:-.05em;color:var(--gold);line-height:.95}
-.finding .desc{font-size:15px;font-weight:800;color:#e0e8f4}
-.origin{
-  margin-top:16px;padding-top:16px;border-top:1px solid var(--line)
+.year{
+  border:1px solid var(--line);
+  padding:7px 10px;
+  border-radius:999px;
+  color:#606a74;
+  font-size:11px;
+  font-weight:800;
 }
-.originHead{font-size:18px;font-weight:900;margin-bottom:12px}
-.originGrid{display:grid;grid-template-columns:1fr 210px;gap:18px;align-items:center}
-.originBtns{display:flex;flex-wrap:wrap;gap:8px}
-.originBtns button{
-  background:#fff;border:1px solid #dde7f3;color:#17304d;border-radius:14px;padding:12px 14px;font-size:13px;font-weight:800;cursor:pointer
+
+/* CHART 1 — MAGNITUD */
+.magnitude{
+  display:grid;
+  gap:18px;
 }
-.originBtns button.active{background:#10233c;color:#fff;border-color:#10233c}
-.originDetail{
-  margin-top:12px;border-radius:18px;padding:16px;background:#10233c;color:#fff;
-  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap
+.m-row{
+  display:grid;
+  grid-template-columns:210px 1fr 132px;
+  gap:14px;
+  align-items:center;
 }
-.originDetail .t{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#a3b8d0;font-weight:900}
-.originDetail .v{font-size:clamp(22px,2.5vw,34px);font-weight:950;letter-spacing:-.04em}
-.originDetail .pct{font-size:clamp(22px,2.5vw,34px);font-weight:950;color:var(--gold)}
-.donut{
-  width:170px;height:170px;border-radius:50%;
-  background:conic-gradient(var(--prov) 0 73%, var(--prov2) 73% 97.6%, #d2e8ff 97.6% 100%);
-  position:relative;margin:auto
+.m-label{
+  font-size:13px;
+  line-height:1.25;
+  font-weight:800;
 }
-.donut:after{
-  content:"FCM";position:absolute;inset:26px;background:#fff;border-radius:50%;
-  display:grid;place-items:center;color:#173150;font-size:26px;font-weight:950;box-shadow:0 0 0 1px #ebf1f7 inset
+.m-track{
+  height:42px;
+  background:#f0f3f5;
+  overflow:hidden;
+  position:relative;
 }
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
-.compCard{
-  background:#fff;border:1px solid var(--line);border-radius:24px;padding:20px;position:relative;overflow:hidden
+.m-fill{
+  height:100%;
+  width:0;
+  transition:width 1.35s cubic-bezier(.16,.85,.25,1);
 }
-.compCard:before{
-  content:"";position:absolute;right:-65px;top:-65px;width:220px;height:220px;border-radius:50%;
-  background:radial-gradient(circle, rgba(10,132,255,.10), transparent 70%);
+.m-fill.blue{background:linear-gradient(90deg,var(--prov),var(--prov2))}
+.m-fill.sky{background:linear-gradient(90deg,#3e9bdc,#8fd2f2)}
+.m-fill.red{background:linear-gradient(90deg,var(--rec),var(--rec2))}
+.m-value{
+  text-align:right;
+  font-size:clamp(19px,2.6vw,28px);
+  font-weight:900;
+  letter-spacing:-.035em;
 }
-.compCard.rec:before{background:radial-gradient(circle, rgba(229,57,53,.09), transparent 70%)}
-.compName{font-size:14px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
-.bigNum{font-size:clamp(40px,6vw,76px);font-weight:950;letter-spacing:-.06em;line-height:.92;margin:12px 0 8px}
-.sub2{font-size:18px;font-weight:800}
-.spark{height:18px;background:#edf3f9;border:1px solid #e1e8f0;border-radius:999px;overflow:hidden;margin-top:16px}
-.ratioBox{
-  margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:20px
+.callout{
+  margin-top:24px;
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:20px;
+  padding-top:17px;
+  border-top:1px solid var(--line);
 }
-.ratioTop{font-size:12px;color:#6f7d91;text-transform:uppercase;letter-spacing:.08em;font-weight:900}
-.ratioRow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px}
-.unitLabel{font-size:14px;font-weight:900;min-width:110px}
-.unitOne{
-  width:58px;height:58px;border-radius:16px;background:linear-gradient(180deg,var(--rec2),var(--rec));
-  color:#fff;display:grid;place-items:center;font-size:19px;font-weight:950;box-shadow:0 10px 24px rgba(229,57,53,.20)
+.callout span{
+  font-size:13px;
+  font-weight:700;
+  color:var(--muted);
 }
-.units{
-  display:flex;gap:8px;flex-wrap:wrap;min-height:62px
+.callout strong{
+  font-size:clamp(34px,5vw,58px);
+  line-height:.95;
+  color:var(--gold);
+  letter-spacing:-.05em;
 }
-.unit{
-  width:58px;height:58px;border-radius:16px;background:linear-gradient(180deg,var(--prov2),var(--prov));
-  color:#fff;display:grid;place-items:center;font-size:18px;font-weight:950;
-  transform:scale(0);transition:transform .35s cubic-bezier(.2,1.3,.3,1);
-  box-shadow:0 10px 24px rgba(10,132,255,.20)
+
+/* CHART 2 — DONUT */
+.donut-layout{
+  display:grid;
+  grid-template-columns:minmax(240px,320px) 1fr;
+  gap:40px;
+  align-items:center;
 }
-.unit.part{width:20px}
-.units.show .unit{transform:scale(1)}
-.foot{margin-top:14px;font-size:12px;color:#6e7d91;line-height:1.45}
-@media(max-width:920px){
-  .grid2{grid-template-columns:1fr}
-  .originGrid{grid-template-columns:1fr}
+.donut-wrap{
+  width:min(280px,75vw);
+  aspect-ratio:1;
+  margin:auto;
+  position:relative;
+}
+.donut-wrap svg{
+  width:100%;height:100%;
+  transform:rotate(-90deg);
+  overflow:visible;
+}
+.donut-bg{
+  fill:none;
+  stroke:#edf1f4;
+  stroke-width:28;
+}
+.donut-seg{
+  fill:none;
+  stroke-width:28;
+  stroke-linecap:butt;
+  cursor:pointer;
+  transition:stroke-width .18s,opacity .18s;
+}
+.donut-seg:hover{stroke-width:34}
+.donut-center{
+  position:absolute;
+  inset:23%;
+  background:#fff;
+  border-radius:50%;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+  box-shadow:0 0 0 1px #eef1f3;
+}
+.donut-center small{
+  color:var(--muted);
+  font-size:10px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  font-weight:800;
+}
+.donut-center strong{
+  font-size:clamp(22px,3vw,30px);
+  margin-top:3px;
+}
+.legend{
+  display:grid;
+}
+.legend-item{
+  display:grid;
+  grid-template-columns:14px 1fr auto;
+  gap:10px;
+  align-items:center;
+  padding:13px 0;
+  border-bottom:1px solid #edf0f2;
+  cursor:pointer;
+}
+.legend-item:last-child{border-bottom:0}
+.legend-dot{width:12px;height:12px;border-radius:50%}
+.legend-name{font-size:14px;font-weight:800}
+.legend-value{font-size:16px;font-weight:900}
+.legend-pct{
+  grid-column:2/4;
+  color:var(--muted);
+  font-size:12px;
+}
+.detail{
+  margin-top:14px;
+  padding:13px 15px;
+  min-height:48px;
+  background:linear-gradient(90deg,var(--soft-blue),#fff);
+  border-left:4px solid var(--prov);
+  font-size:14px;
+  line-height:1.4;
+}
+
+/* CHART 3 — LOLLIPOP */
+.lollipop{
+  padding-top:12px;
+}
+.scale{
+  position:relative;
+  height:180px;
+  border-bottom:1px solid #aeb6bd;
+  margin-top:6px;
+}
+.gridline{
+  position:absolute;
+  top:0;bottom:0;
+  border-left:1px dashed #e0e5e8;
+}
+.tick{
+  position:absolute;
+  bottom:-22px;
+  transform:translateX(-50%);
+  font-size:11px;
+  color:#78828b;
+}
+.l-row{
+  position:absolute;
+  left:0;right:0;
+  height:56px;
+}
+.l-row.p{top:26px}
+.l-row.r{top:100px}
+.l-label{
+  position:absolute;
+  left:0;
+  top:2px;
+  width:112px;
+  font-size:13px;
+  font-weight:900;
+}
+.l-line{
+  position:absolute;
+  left:122px;
+  top:19px;
+  height:3px;
+  width:0;
+  transition:width 1.45s cubic-bezier(.16,.85,.25,1);
+}
+.l-line.p{background:var(--prov)}
+.l-line.r{background:var(--rec)}
+.l-dot{
+  position:absolute;
+  top:9px;
+  left:122px;
+  width:22px;height:22px;
+  border-radius:50%;
+  transform:translateX(-50%);
+  transition:left 1.45s cubic-bezier(.16,.85,.25,1);
+  box-shadow:0 0 0 5px rgba(255,255,255,.95),0 2px 8px rgba(0,0,0,.13);
+}
+.l-dot.p{background:var(--prov)}
+.l-dot.r{background:var(--rec)}
+.l-value{
+  position:absolute;
+  top:2px;
+  left:136px;
+  font-size:clamp(17px,2.4vw,24px);
+  font-weight:900;
+  letter-spacing:-.035em;
+  white-space:nowrap;
+  opacity:0;
+  transition:opacity .35s 1.05s;
+}
+.lollipop.visible .l-value{opacity:1}
+.ratio{
+  margin-top:34px;
+  padding:16px 18px;
+  border:1px solid #e8ecef;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  background:linear-gradient(90deg,var(--soft-red),#fff 46%,var(--soft-blue));
+}
+.ratio span{
+  font-size:13px;
+  color:var(--muted);
+  font-weight:700;
+}
+.ratio strong{
+  font-size:clamp(30px,4.4vw,50px);
+  letter-spacing:-.05em;
+}
+
+/* CHART 4 — EDUCACIÓN */
+.education{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+.e-card{
+  padding:20px;
+  border:1px solid var(--line);
+  min-height:170px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between;
+}
+.e-label{
+  font-size:12px;
+  color:var(--muted);
+  font-weight:800;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+}
+.e-number{
+  font-size:clamp(38px,5vw,60px);
+  font-weight:900;
+  letter-spacing:-.05em;
+  margin-top:12px;
+}
+.e-sub{
+  margin-top:8px;
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.4;
+}
+.e-track{
+  margin-top:20px;
+  height:8px;
+  background:#f0f2f4;
+  position:relative;
+  overflow:hidden;
+}
+.e-fill{
+  height:100%;
+  width:0;
+  background:linear-gradient(90deg,var(--rec),var(--rec2));
+  transition:width 1.3s cubic-bezier(.16,.85,.25,1);
+}
+.footer-note{
+  font-size:11px;
+  color:#87919a;
+  margin-top:18px;
 }
 @media(max-width:760px){
-  .row{grid-template-columns:1fr;gap:8px}
-  .outVal{text-align:left}
+  .page{width:min(100% - 20px,1080px);padding-top:24px}
+  .m-row{grid-template-columns:1fr;gap:7px}
+  .m-value{text-align:left}
+  .donut-layout{grid-template-columns:1fr}
+  .education{grid-template-columns:1fr}
+  .l-label{width:88px}
+  .l-line,.l-dot{left:96px}
+  .l-value{font-size:15px}
 }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <section class="hero">
-    <div class="kicker">Especial de datos</div>
-    <h1><span class="provT">Providencia</span> vs <span class="recT">Recoleta</span></h1>
-    <div class="sub">Dos gráficos interactivos para mostrar la brecha presupuestaria entre comunas vecinas.</div>
-    <div class="nav">
-      <a href="#g1" class="btn1">Gráfico 1</a>
-      <a href="#g2" class="btn2">Gráfico 2</a>
-      <button class="btn3" id="playAll">▶ Animar todo</button>
+<div class="topline"></div>
+
+<main class="page">
+  <header class="header">
+    <div class="eyebrow">Visualizaciones de datos · 2022</div>
+    <h1>Providencia y Recoleta</h1>
+    <p>Comparaciones presupuestarias entre dos comunas vecinas.</p>
+  </header>
+
+  <!-- 1 -->
+  <section class="chart js-reveal" id="chart1">
+    <div class="chart-head">
+      <div>
+        <div class="chart-kicker">Magnitud</div>
+        <h2>Aporte de Providencia al FCM vs. presupuesto total de Recoleta</h2>
+        <div class="chart-note">Millones de pesos</div>
+      </div>
+      <div class="year">2022</div>
     </div>
+
+    <div class="magnitude">
+      <div class="m-row">
+        <div class="m-label">Aporte Providencia al FCM</div>
+        <div class="m-track"><div class="m-fill blue" data-w="84.19"></div></div>
+        <div class="m-value" style="color:var(--prov)">$50.515</div>
+      </div>
+
+      <div class="m-row">
+        <div class="m-label">Ejecución real Providencia</div>
+        <div class="m-track"><div class="m-fill sky" data-w="83.36"></div></div>
+        <div class="m-value" style="color:#2c8fc9">$50.014</div>
+      </div>
+
+      <div class="m-row">
+        <div class="m-label">Presupuesto total Recoleta</div>
+        <div class="m-track"><div class="m-fill red" data-w="72.19"></div></div>
+        <div class="m-value" style="color:var(--rec)">$43.314</div>
+      </div>
+    </div>
+
+    <div class="callout">
+      <span>Diferencia aproximada</span>
+      <strong>$7.201 millones</strong>
+    </div>
+
+    <div class="footer-note">Fuente: antecedentes presupuestarios utilizados en el reportaje.</div>
   </section>
 
-  <section class="section">
-    <article class="card" id="g1">
-      <div class="top">
-        <div>
-          <div class="label">Gráfico 1</div>
-          <h2>Aporte de Providencia al FCM vs. presupuesto de Recoleta</h2>
-          <div class="small">Comparación de magnitud · 2022</div>
-        </div>
-        <div class="tag">2022</div>
+  <!-- 2 -->
+  <section class="chart js-reveal" id="chart2">
+    <div class="chart-head">
+      <div>
+        <div class="chart-kicker">Composición</div>
+        <h2>¿De dónde viene el aporte de Providencia al FCM?</h2>
+        <div class="chart-note">Participación de los principales componentes informados</div>
       </div>
+      <div class="year">2022</div>
+    </div>
 
-      <div class="controls">
-        <button class="play" id="play1">Animar gráfico 1</button>
-        <button class="alt" id="reset1">Reiniciar</button>
-      </div>
-
-      <div class="rows">
-        <div class="row">
-          <div class="name">Aporte Providencia al FCM</div>
-          <div class="track"><div class="fill prov" id="barProv"><div class="inVal">$50.515</div></div></div>
-          <div class="outVal" style="color:var(--prov)">$50.515</div>
-        </div>
-        <div class="row">
-          <div class="name">Ejecución real Providencia</div>
-          <div class="track"><div class="fill exec" id="barExec"><div class="inVal">$50.014</div></div></div>
-          <div class="outVal" style="color:#1a9fff">$50.014</div>
-        </div>
-        <div class="row">
-          <div class="name">Presupuesto total Recoleta</div>
-          <div class="track"><div class="fill reco" id="barReco"><div class="inVal">$43.314</div></div></div>
-          <div class="outVal" style="color:var(--rec)">$43.314</div>
+    <div class="donut-layout">
+      <div class="donut-wrap">
+        <svg viewBox="0 0 220 220">
+          <circle class="donut-bg" cx="110" cy="110" r="78"></circle>
+          <circle class="donut-seg" id="seg1" cx="110" cy="110" r="78" stroke="#0b68c9"></circle>
+          <circle class="donut-seg" id="seg2" cx="110" cy="110" r="78" stroke="#42a9eb"></circle>
+          <circle class="donut-seg" id="seg3" cx="110" cy="110" r="78" stroke="#d89d1c"></circle>
+        </svg>
+        <div class="donut-center">
+          <small>Aporte total</small>
+          <strong>$50.515</strong>
         </div>
       </div>
 
-      <div class="finding" id="finding1">
-        <div>
-          <div class="t">Hallazgo principal</div>
-          <div class="desc">Diferencia aproximada</div>
-        </div>
-        <div class="big">$7.201 millones</div>
-      </div>
-
-      <div class="origin">
-        <div class="originHead">¿De dónde viene el aporte?</div>
-        <div class="originGrid">
-          <div>
-            <div class="originBtns">
-              <button class="originBtn active" data-label="Patentes municipales" data-value="$36.782 millones" data-pct="73,0%">Patentes</button>
-              <button class="originBtn" data-label="Permisos de circulación" data-value="$12.424 millones" data-pct="24,6%">Permisos</button>
-              <button class="originBtn" data-label="Multas" data-value="$1.308 millones" data-pct="2,6%">Multas</button>
-            </div>
-            <div class="originDetail">
-              <div>
-                <div class="t" id="originLabel">Patentes municipales</div>
-                <div class="v" id="originValue">$36.782 millones</div>
-              </div>
-              <div class="pct" id="originPct">73,0%</div>
-            </div>
+      <div>
+        <div class="legend">
+          <div class="legend-item" data-label="Patentes municipales" data-value="$36.782 millones" data-pct="73,0%">
+            <span class="legend-dot" style="background:#0b68c9"></span>
+            <span class="legend-name">Patentes municipales</span>
+            <span class="legend-value">$36.782</span>
+            <span class="legend-pct">73,0%</span>
           </div>
-          <div class="donut" aria-hidden="true"></div>
-        </div>
-      </div>
-    </article>
 
-    <article class="card recGlow" id="g2">
-      <div class="top">
-        <div>
-          <div class="label">Gráfico 2</div>
-          <h2>Brecha presupuestaria per cápita</h2>
-          <div class="small">Comparación por habitante · 2022</div>
-        </div>
-        <div class="tag">2022</div>
-      </div>
+          <div class="legend-item" data-label="Permisos de circulación" data-value="$12.424 millones" data-pct="24,6%">
+            <span class="legend-dot" style="background:#42a9eb"></span>
+            <span class="legend-name">Permisos de circulación</span>
+            <span class="legend-value">$12.424</span>
+            <span class="legend-pct">24,6%</span>
+          </div>
 
-      <div class="controls">
-        <button class="play" id="play2">Animar gráfico 2</button>
-        <button class="alt" id="reset2">Reiniciar</button>
-      </div>
-
-      <div class="grid2">
-        <div class="compCard">
-          <div class="compName provT">Providencia</div>
-          <div class="bigNum provT counter" data-end="1189000">$0</div>
-          <div class="sub2">por habitante</div>
-          <div class="spark"><div class="fill prov" id="fillProv"></div></div>
-          <div class="small">Presupuesto: $174.795 millones · Población aprox.: 147.000</div>
-        </div>
-
-        <div class="compCard rec">
-          <div class="compName recT">Recoleta</div>
-          <div class="bigNum recT counter" data-end="274100">$0</div>
-          <div class="sub2">por habitante</div>
-          <div class="spark"><div class="fill reco" id="fillRec"></div></div>
-          <div class="small">Presupuesto: $43.314 millones · Población aprox.: 158.000</div>
-        </div>
-      </div>
-
-      <div class="ratioBox">
-        <div class="ratioTop">Visualización de la relación</div>
-        <div class="ratioRow">
-          <div class="unitLabel recT">Recoleta</div>
-          <div class="unitOne">1×</div>
-        </div>
-        <div class="ratioRow">
-          <div class="unitLabel provT">Providencia</div>
-          <div class="units" id="units">
-            <div class="unit">1</div>
-            <div class="unit">2</div>
-            <div class="unit">3</div>
-            <div class="unit">4</div>
-            <div class="unit part"></div>
+          <div class="legend-item" data-label="Multas" data-value="$1.308 millones" data-pct="2,6%">
+            <span class="legend-dot" style="background:#d89d1c"></span>
+            <span class="legend-name">Multas</span>
+            <span class="legend-value">$1.308</span>
+            <span class="legend-pct">2,6%</span>
           </div>
         </div>
-      </div>
 
-      <div class="finding" id="finding2">
-        <div>
-          <div class="t">Hallazgo principal</div>
-          <div class="desc">Relación aproximada</div>
-        </div>
-        <div class="big">4,34 veces</div>
+        <div class="detail" id="detail">Pasa el mouse o toca una categoría para ver el detalle.</div>
       </div>
-    </article>
+    </div>
 
-    <div class="foot">Datos usados según tu referencia: aporte Providencia al FCM <strong>$50.515 millones</strong>, ejecución real Providencia <strong>$50.014 millones</strong>, presupuesto total Recoleta <strong>$43.314 millones</strong>, Providencia <strong>$1.189.000</strong> por habitante y Recoleta <strong>$274.100</strong> por habitante.</div>
+    <div class="footer-note">Fuente: antecedentes presupuestarios utilizados en el reportaje.</div>
   </section>
-</div>
+
+  <!-- 3 -->
+  <section class="chart js-reveal lollipop" id="chart3">
+    <div class="chart-head">
+      <div>
+        <div class="chart-kicker">Brecha por habitante</div>
+        <h2>Presupuesto municipal disponible por habitante</h2>
+        <div class="chart-note">Pesos por habitante</div>
+      </div>
+      <div class="year">2022</div>
+    </div>
+
+    <div class="scale">
+      <div class="gridline" style="left:10%"></div>
+      <div class="gridline" style="left:32.5%"></div>
+      <div class="gridline" style="left:55%"></div>
+      <div class="gridline" style="left:77.5%"></div>
+      <div class="gridline" style="left:100%"></div>
+
+      <span class="tick" style="left:10%">0</span>
+      <span class="tick" style="left:32.5%">300 mil</span>
+      <span class="tick" style="left:55%">600 mil</span>
+      <span class="tick" style="left:77.5%">900 mil</span>
+      <span class="tick" style="left:100%">1,2 mill.</span>
+
+      <div class="l-row p">
+        <div class="l-label" style="color:var(--prov)">Providencia</div>
+        <div class="l-line p" id="lineP"></div>
+        <div class="l-dot p" id="dotP"></div>
+        <div class="l-value" id="valP" style="color:var(--prov)">$1.189.000</div>
+      </div>
+
+      <div class="l-row r">
+        <div class="l-label" style="color:var(--rec)">Recoleta</div>
+        <div class="l-line r" id="lineR"></div>
+        <div class="l-dot r" id="dotR"></div>
+        <div class="l-value" id="valR" style="color:var(--rec)">$274.100</div>
+      </div>
+    </div>
+
+    <div class="ratio">
+      <span>Brecha aproximada</span>
+      <strong>4,34 veces</strong>
+    </div>
+
+    <div class="footer-note">Fuente: datos utilizados en el reportaje.</div>
+  </section>
+
+  <!-- 4 -->
+  <section class="chart js-reveal" id="chart4">
+    <div class="chart-head">
+      <div>
+        <div class="chart-kicker">Educación · Recoleta</div>
+        <h2>Déficit de arrastre durante 2022</h2>
+        <div class="chart-note">Saldo inicial de caja y saldo tras la primera modificación presupuestaria</div>
+      </div>
+      <div class="year">2022</div>
+    </div>
+
+    <div class="education">
+      <div class="e-card">
+        <div>
+          <div class="e-label">Inicio del año</div>
+          <div class="e-number" style="color:var(--rec)">-$3.308 millones</div>
+          <div class="e-sub">Saldo inicial de caja negativo.</div>
+        </div>
+        <div class="e-track"><div class="e-fill" data-w="100"></div></div>
+      </div>
+
+      <div class="e-card">
+        <div>
+          <div class="e-label">Tras primera modificación</div>
+          <div class="e-number" style="color:var(--rec)">-$2.055 millones</div>
+          <div class="e-sub">Déficit de arrastre que se mantuvo durante el resto del ejercicio.</div>
+        </div>
+        <div class="e-track"><div class="e-fill" data-w="62.1"></div></div>
+      </div>
+    </div>
+
+    <div class="footer-note">Fuente: cifras consignadas en el reportaje.</div>
+  </section>
+</main>
 
 <script>
-const q=s=>document.querySelector(s), qa=s=>[...document.querySelectorAll(s)];
+const $$ = s => [...document.querySelectorAll(s)];
 
-function animate1(){
-  const data = [
-    [q('#barProv'), '84.19%'],
-    [q('#barExec'), '83.36%'],
-    [q('#barReco'), '72.19%']
-  ];
-  data.forEach(([el])=>{el.style.width='0%'; el.classList.remove('show')});
-  q('#finding1').style.opacity='0';
-  setTimeout(()=>{
-    data.forEach(([el,w],i)=>setTimeout(()=>{el.style.width=w; el.classList.add('show')}, i*220));
-    setTimeout(()=>q('#finding1').style.opacity='1', 1000);
-  },60);
-}
-function reset1(){
-  [q('#barProv'),q('#barExec'),q('#barReco')].forEach(el=>{el.style.width='0%';el.classList.remove('show')});
-  q('#finding1').style.opacity='0';
-}
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(entry=>{
+    if(!entry.isIntersecting || entry.target.dataset.played) return;
+    entry.target.dataset.played="1";
 
-function fmt(n){ return '$' + Math.round(n).toLocaleString('es-CL'); }
-function animate2(){
-  qa('.counter').forEach(el=>{
-    el.textContent='$0';
-    const end=+el.dataset.end, start=performance.now(), dur=1400;
-    function tick(t){
-      const p=Math.min(1,(t-start)/dur), e=1-Math.pow(1-p,3);
-      el.textContent=fmt(end*e);
-      if(p<1) requestAnimationFrame(tick);
+    if(entry.target.id==="chart1"){
+      entry.target.querySelectorAll(".m-fill").forEach((el,i)=>{
+        setTimeout(()=>el.style.width=el.dataset.w+"%", i*180);
+      });
     }
-    requestAnimationFrame(tick);
+
+    if(entry.target.id==="chart2"){
+      animateDonut();
+    }
+
+    if(entry.target.id==="chart3"){
+      animateLollipop();
+    }
+
+    if(entry.target.id==="chart4"){
+      entry.target.querySelectorAll(".e-fill").forEach((el,i)=>{
+        setTimeout(()=>el.style.width=el.dataset.w+"%",i*180);
+      });
+    }
   });
-  q('#fillProv').style.width='0%';
-  q('#fillRec').style.width='0%';
-  q('#units').classList.remove('show');
-  q('#finding2').style.opacity='0';
-  setTimeout(()=>{
-    q('#fillProv').style.width='100%';
-    q('#fillRec').style.width='23.05%';
-  },120);
-  setTimeout(()=>q('#units').classList.add('show'), 700);
-  setTimeout(()=>q('#finding2').style.opacity='1', 1050);
-}
-function reset2(){
-  qa('.counter').forEach(el=>el.textContent='$0');
-  q('#fillProv').style.width='0%';
-  q('#fillRec').style.width='0%';
-  q('#units').classList.remove('show');
-  q('#finding2').style.opacity='0';
+},{threshold:.24});
+
+$$(".js-reveal").forEach(el=>observer.observe(el));
+
+function animateDonut(){
+  const c=2*Math.PI*78;
+  const parts=[
+    {el:document.getElementById("seg1"),pct:.730,offset:0},
+    {el:document.getElementById("seg2"),pct:.246,offset:.730},
+    {el:document.getElementById("seg3"),pct:.026,offset:.976}
+  ];
+  parts.forEach((p,i)=>{
+    const len=c*p.pct;
+    p.el.style.strokeDasharray=`0 ${c}`;
+    p.el.style.strokeDashoffset=-c*p.offset;
+    setTimeout(()=>{
+      p.el.style.transition="stroke-dasharray 1s ease";
+      p.el.style.strokeDasharray=`${len} ${c-len}`;
+    },i*160);
+  });
 }
 
-q('#play1').onclick=animate1;
-q('#reset1').onclick=reset1;
-q('#play2').onclick=animate2;
-q('#reset2').onclick=reset2;
-q('#playAll').onclick=()=>{ animate1(); setTimeout(animate2, 450); };
-
-qa('.originBtn').forEach(btn=>{
-  btn.onclick=()=>{
-    qa('.originBtn').forEach(x=>x.classList.remove('active'));
-    btn.classList.add('active');
-    q('#originLabel').textContent=btn.dataset.label;
-    q('#originValue').textContent=btn.dataset.value;
-    q('#originPct').textContent=btn.dataset.pct;
+$$(".legend-item").forEach(item=>{
+  const show=()=>{
+    document.getElementById("detail").innerHTML=
+      `<strong>${item.dataset.label}</strong>: ${item.dataset.value} (${item.dataset.pct}).`;
   };
+  item.addEventListener("mouseenter",show);
+  item.addEventListener("click",show);
 });
 
-window.onload=()=>{ animate1(); setTimeout(animate2, 500); };
+function animateLollipop(){
+  const box=document.getElementById("chart3");
+  box.classList.add("visible");
+  const scale=box.querySelector(".scale");
+  const base=122;
+  const usable=Math.max(250,scale.clientWidth-base-20);
+  const p=1189000/1200000;
+  const r=274100/1200000;
+
+  document.getElementById("lineP").style.width=(usable*p)+"px";
+  document.getElementById("lineR").style.width=(usable*r)+"px";
+  document.getElementById("dotP").style.left=(base+usable*p)+"px";
+  document.getElementById("dotR").style.left=(base+usable*r)+"px";
+  document.getElementById("valP").style.left=(base+usable*p+15)+"px";
+  document.getElementById("valR").style.left=(base+usable*r+15)+"px";
+}
+
+window.addEventListener("resize",()=>{
+  if(document.getElementById("chart3").dataset.played) animateLollipop();
+});
 </script>
 </body>
 </html>
