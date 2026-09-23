@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Aporte Providencia FCM — versión minimal</title>
+<style>
+:root{
+  --bg:#071221; --bg2:#10345e; --paper:#fbf8f1; --ink:#101927; --muted:#6d7a8e;
+  --prov:#0a84ff; --prov2:#62c1ff; --exec:#7fd7ff; --rec:#e53935; --rec2:#ff7b70;
+  --gold:#ffc857; --line:#dce4ee;
+}
+*{box-sizing:border-box}
+body{
+  margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  background:
+    radial-gradient(circle at 10% 10%, rgba(10,132,255,.22), transparent 28%),
+    radial-gradient(circle at 92% 10%, rgba(229,57,53,.16), transparent 24%),
+    linear-gradient(145deg,#06111f,#0b1d34 50%, #071221);
+  color:#fff;
+}
+.wrap{max-width:1220px;margin:auto;padding:28px 20px 42px}
+.hero{
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
+  border:1px solid rgba(255,255,255,.12); border-radius:28px; padding:24px;
+  box-shadow:0 20px 60px rgba(0,0,0,.30); backdrop-filter:blur(10px);
+}
+.kicker{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:#a9d0ff}
+h1{margin:10px 0 0;font-size:clamp(36px,5vw,72px);line-height:.92;letter-spacing:-.05em}
+.provT{color:var(--prov2)} .recT{color:var(--rec2)}
+.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+button{border:0;border-radius:999px;padding:13px 18px;font-weight:900;font-size:14px;cursor:pointer}
+.b1{background:linear-gradient(90deg,var(--prov),var(--prov2));color:#fff}
+.b2{background:linear-gradient(90deg,var(--rec),var(--rec2));color:#fff}
+.b3{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.14)}
+.main{
+  margin-top:18px;background:var(--paper);color:var(--ink);border-radius:32px;padding:24px;
+  box-shadow:0 34px 80px rgba(0,0,0,.34);
+}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.top h2{margin:0;font-size:clamp(24px,3vw,42px);line-height:1.02;letter-spacing:-.04em}
+.tag{background:#edf5ff;color:#24435f;border-radius:999px;padding:10px 14px;font-size:12px;font-weight:900;text-transform:uppercase}
+.chart{
+  margin-top:18px;background:#fff;border:1px solid #e1e9f2;border-radius:26px;padding:18px;position:relative;overflow:hidden
+}
+.chart:before{
+  content:"";position:absolute;right:-90px;top:-80px;width:300px;height:300px;border-radius:50%;
+  background:radial-gradient(circle, rgba(10,132,255,.12), transparent 70%);
+}
+.axis{font-size:12px;color:#7b8798;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+.rows{display:grid;gap:22px;margin-top:18px}
+.row{display:grid;grid-template-columns:220px 1fr 150px;align-items:center;gap:16px}
+.name{font-size:15px;font-weight:900;color:#20344b;line-height:1.2}
+.track{height:62px;border-radius:18px;background:#edf3f9;position:relative;overflow:hidden;border:1px solid #e1e8f0}
+.fill{
+  height:100%;width:0;border-radius:18px;position:relative;transition:width 1.3s cubic-bezier(.2,.9,.2,1);
+  box-shadow:0 14px 28px rgba(12,28,53,.16), inset 0 1px 0 rgba(255,255,255,.28); cursor:pointer
+}
+.prov{background:linear-gradient(90deg,var(--prov),var(--prov2))}
+.exec{background:linear-gradient(90deg,#3ca7ff,#9ae0ff)}
+.reco{background:linear-gradient(90deg,var(--rec),var(--rec2))}
+.inVal{
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#fff;font-size:clamp(16px,2vw,28px);
+  font-weight:950;letter-spacing:-.04em;opacity:0;transition:opacity .35s ease .15s;text-shadow:0 2px 8px rgba(0,0,0,.25)
+}
+.fill.show .inVal{opacity:1}
+.outVal{font-size:clamp(20px,2.1vw,32px);font-weight:950;letter-spacing:-.04em;text-align:right}
+.outVal.provT{color:var(--prov)} .outVal.execT{color:#199fff} .outVal.recT{color:var(--rec)}
+.finding{
+  margin-top:22px;border-radius:24px;padding:18px 20px;background:#0e2037;color:#fff;
+  display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap
+}
+.finding .label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#a7bdd7;font-weight:900}
+.finding .big{font-size:clamp(34px,4.5vw,64px);font-weight:950;letter-spacing:-.05em;color:var(--gold);line-height:.95}
+.finding .small{font-size:16px;font-weight:800;color:#e0e8f4}
+.origin{
+  margin-top:18px;background:#fff;border:1px solid #e1e9f2;border-radius:26px;padding:18px
+}
+.originHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
+.originHead h3{margin:0;font-size:22px}
+.originGrid{display:grid;grid-template-columns:1fr 220px;gap:18px;align-items:center;margin-top:12px}
+.originBtns{display:flex;flex-wrap:wrap;gap:8px}
+.originBtns button{
+  background:#fff;border:1px solid #dde7f3;color:#17304d;border-radius:14px;padding:12px 14px;font-size:13px
+}
+.originBtns button.active{background:#10233c;color:#fff;border-color:#10233c}
+.originDetail{
+  margin-top:14px;border-radius:20px;padding:16px;background:#10233c;color:#fff;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap
+}
+.originDetail .t{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#a3b8d0;font-weight:900}
+.originDetail .v{font-size:clamp(24px,2.8vw,38px);font-weight:950;letter-spacing:-.04em}
+.originDetail .pct{font-size:clamp(24px,2.8vw,38px);font-weight:950;color:var(--gold)}
+.donut{
+  width:180px;height:180px;border-radius:50%;
+  background:conic-gradient(var(--prov) 0 73%, var(--prov2) 73% 97.6%, #d2e8ff 97.6% 100%);
+  position:relative;margin:auto
+}
+.donut:after{
+  content:"FCM";position:absolute;inset:28px;background:#fff;border-radius:50%;
+  display:grid;place-items:center;color:#173150;font-size:28px;font-weight:950;box-shadow:0 0 0 1px #ebf1f7 inset;
+}
+.tooltip{
+  position:absolute;display:none;z-index:10;background:#081626;color:#fff;max-width:240px;
+  padding:10px 12px;border-radius:12px;font-size:12px;line-height:1.4;box-shadow:0 16px 36px rgba(0,0,0,.24)
+}
+.foot{margin-top:14px;font-size:12px;color:#6e7d91;line-height:1.45}
+@media(max-width:960px){
+  .row{grid-template-columns:1fr;gap:8px}
+  .outVal{text-align:left}
+  .originGrid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <section class="hero">
+    <div class="kicker">Visualización periodística</div>
+    <h1><span class="provT">Providencia</span> aporta más al FCM que todo el presupuesto de <span class="recT">Recoleta</span>.</h1>
+    <div class="btns">
+      <button class="b1" id="play">▶ Animar magnitud</button>
+      <button class="b2" id="findingBtn">★ Mostrar hallazgo</button>
+      <button class="b3" id="reset">↻ Reiniciar</button>
+    </div>
+  </section>
+
+  <section class="main">
+    <div class="top">
+      <div>
+        <h2>Aporte de Providencia al FCM vs. presupuesto de Recoleta</h2>
+      </div>
+      <div class="tag">2022</div>
+    </div>
+
+    <div class="chart" id="chart">
+      <div class="tooltip" id="tooltip"></div>
+      <div class="axis">Comparación de magnitud · millones de pesos (M$)</div>
+
+      <div class="rows">
+        <div class="row">
+          <div class="name">Aporte Providencia al FCM</div>
+          <div class="track">
+            <div class="fill prov" id="barProv" data-width="84.19" data-title="Aporte Providencia al FCM" data-value="$50.515 millones">
+              <div class="inVal">$50.515</div>
+            </div>
+          </div>
+          <div class="outVal provT">$50.515</div>
+        </div>
+
+        <div class="row">
+          <div class="name">Ejecución real Providencia</div>
+          <div class="track">
+            <div class="fill exec" id="barExec" data-width="83.36" data-title="Ejecución real Providencia" data-value="$50.014 millones">
+              <div class="inVal">$50.014</div>
+            </div>
+          </div>
+          <div class="outVal execT">$50.014</div>
+        </div>
+
+        <div class="row">
+          <div class="name">Presupuesto total Recoleta</div>
+          <div class="track">
+            <div class="fill reco" id="barReco" data-width="72.19" data-title="Presupuesto total Recoleta" data-value="$43.314 millones">
+              <div class="inVal">$43.314</div>
+            </div>
+          </div>
+          <div class="outVal recT">$43.314</div>
+        </div>
+      </div>
+
+      <div class="finding" id="finding">
+        <div>
+          <div class="label">Hallazgo principal</div>
+          <div class="small">Diferencia aproximada</div>
+        </div>
+        <div class="big">$7.201 millones</div>
+      </div>
+    </div>
+
+    <div class="origin" id="origin">
+      <div class="originHead">
+        <h3>¿De dónde viene el aporte?</h3>
+      </div>
+      <div class="originGrid">
+        <div>
+          <div class="originBtns">
+            <button class="originBtn active" data-label="Patentes municipales" data-value="$36.782 millones" data-pct="73,0%">Patentes</button>
+            <button class="originBtn" data-label="Permisos de circulación" data-value="$12.424 millones" data-pct="24,6%">Permisos</button>
+            <button class="originBtn" data-label="Multas" data-value="$1.308 millones" data-pct="2,6%">Multas</button>
+          </div>
+          <div class="originDetail">
+            <div>
+              <div class="t" id="originLabel">Patentes municipales</div>
+              <div class="v" id="originValue">$36.782 millones</div>
+            </div>
+            <div class="pct" id="originPct">73,0%</div>
+          </div>
+        </div>
+        <div class="donut" aria-hidden="true"></div>
+      </div>
+    </div>
+
+    <div class="foot">Datos usados según tu referencia: aporte Providencia al FCM <strong>$50.515 millones</strong>, ejecución real Providencia <strong>$50.014 millones</strong> y presupuesto total Recoleta <strong>$43.314 millones</strong>.</div>
+  </section>
+</div>
+
+<script>
+const q=s=>document.querySelector(s), qa=s=>[...document.querySelectorAll(s)];
+const bars=[q('#barProv'),q('#barExec'),q('#barReco')];
+const tooltip=q('#tooltip'), chart=q('#chart');
+
+function animate(compare=true){
+  bars.forEach(b=>{b.style.width='0%';b.classList.remove('show')});
+  q('#finding').style.opacity = compare ? '0' : '1';
+  setTimeout(()=>{
+    bars.forEach((b,i)=>setTimeout(()=>{b.style.width=b.dataset.width+'%';b.classList.add('show')},i*220));
+    if(compare){
+      setTimeout(()=>{q('#finding').style.opacity='1'},1100);
+    }
+  },50);
+}
+q('#play').onclick=()=>animate(true);
+q('#findingBtn').onclick=()=>{q('#finding').scrollIntoView({behavior:'smooth', block:'center'}); q('#finding').style.opacity='1';}
+q('#reset').onclick=()=>{bars.forEach(b=>{b.style.width='0%';b.classList.remove('show')});q('#finding').style.opacity='0';tooltip.style.display='none';}
+
+bars.forEach(bar=>{
+  bar.onclick=(e)=>{
+    const r=chart.getBoundingClientRect();
+    tooltip.innerHTML='<strong>'+bar.dataset.title+'</strong><br>'+bar.dataset.value;
+    tooltip.style.display='block';
+    tooltip.style.left=Math.min(e.clientX-r.left+8,r.width-250)+'px';
+    tooltip.style.top=Math.max(10,e.clientY-r.top-60)+'px';
+  };
+});
+chart.onmouseleave=()=>tooltip.style.display='none';
+
+qa('.originBtn').forEach(btn=>{
+  btn.onclick=()=>{
+    qa('.originBtn').forEach(x=>x.classList.remove('active'));
+    btn.classList.add('active');
+    q('#originLabel').textContent=btn.dataset.label;
+    q('#originValue').textContent=btn.dataset.value;
+    q('#originPct').textContent=btn.dataset.pct;
+  };
+});
+
+window.onload=()=>animate(true);
+</script>
+</body>
+</html>
