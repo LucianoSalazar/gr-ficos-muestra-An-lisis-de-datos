@@ -3,236 +3,368 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Aporte Providencia FCM — versión minimal</title>
+<title>Providencia vs Recoleta — Gráficos</title>
 <style>
 :root{
-  --bg:#071221; --bg2:#10345e; --paper:#fbf8f1; --ink:#101927; --muted:#6d7a8e;
-  --prov:#0a84ff; --prov2:#62c1ff; --exec:#7fd7ff; --rec:#e53935; --rec2:#ff7b70;
-  --gold:#ffc857; --line:#dce4ee;
+  --bg:#071221; --bg2:#10345e; --paper:#f8f4ec; --ink:#111927; --muted:#6f7b8d;
+  --prov:#0a84ff; --prov2:#63c2ff; --exec:#8cddff; --rec:#e53935; --rec2:#ff7b70;
+  --gold:#ffc857; --line:#dfe6ef; --card:#ffffff; --dark:#0e2037;
 }
 *{box-sizing:border-box}
+html{scroll-behavior:smooth}
 body{
-  margin:0;font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+  color:#fff;
   background:
     radial-gradient(circle at 10% 10%, rgba(10,132,255,.22), transparent 28%),
     radial-gradient(circle at 92% 10%, rgba(229,57,53,.16), transparent 24%),
     linear-gradient(145deg,#06111f,#0b1d34 50%, #071221);
-  color:#fff;
 }
-.wrap{max-width:1220px;margin:auto;padding:28px 20px 42px}
+.wrap{max-width:1200px;margin:auto;padding:24px 18px 40px}
 .hero{
   background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03));
-  border:1px solid rgba(255,255,255,.12); border-radius:28px; padding:24px;
-  box-shadow:0 20px 60px rgba(0,0,0,.30); backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.12);
+  border-radius:28px;
+  padding:24px;
+  box-shadow:0 20px 60px rgba(0,0,0,.30);
 }
 .kicker{font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.12em;color:#a9d0ff}
-h1{margin:10px 0 0;font-size:clamp(36px,5vw,72px);line-height:.92;letter-spacing:-.05em}
+h1{
+  margin:10px 0 10px;
+  font-size:clamp(34px,5vw,68px);
+  line-height:.94;letter-spacing:-.05em
+}
 .provT{color:var(--prov2)} .recT{color:var(--rec2)}
-.btns{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
-button{border:0;border-radius:999px;padding:13px 18px;font-weight:900;font-size:14px;cursor:pointer}
-.b1{background:linear-gradient(90deg,var(--prov),var(--prov2));color:#fff}
-.b2{background:linear-gradient(90deg,var(--rec),var(--rec2));color:#fff}
-.b3{background:rgba(255,255,255,.08);color:#fff;border:1px solid rgba(255,255,255,.14)}
-.main{
-  margin-top:18px;background:var(--paper);color:var(--ink);border-radius:32px;padding:24px;
-  box-shadow:0 34px 80px rgba(0,0,0,.34);
+.sub{max-width:760px;font-size:16px;color:#d5e1f4;line-height:1.45}
+.nav{
+  display:flex;gap:10px;flex-wrap:wrap;margin-top:18px
 }
+.nav a,.nav button{
+  text-decoration:none;border:0;border-radius:999px;padding:12px 16px;font-weight:900;font-size:14px;cursor:pointer
+}
+.btn1{background:linear-gradient(90deg,var(--prov),var(--prov2));color:#fff}
+.btn2{background:linear-gradient(90deg,var(--rec),var(--rec2));color:#fff}
+.btn3{background:rgba(255,255,255,.09);color:#fff;border:1px solid rgba(255,255,255,.14)}
+.section{
+  margin-top:18px;background:var(--paper);color:var(--ink);border-radius:30px;padding:22px;
+  box-shadow:0 30px 80px rgba(0,0,0,.34)
+}
+.card{
+  background:var(--card);border:1px solid var(--line);border-radius:26px;padding:18px;position:relative;overflow:hidden
+}
+.card + .card{margin-top:18px}
+.card:before{
+  content:"";position:absolute;right:-70px;top:-70px;width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle, rgba(10,132,255,.10), transparent 70%);
+}
+.card.recGlow:before{background:radial-gradient(circle, rgba(229,57,53,.09), transparent 70%)}
 .top{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
-.top h2{margin:0;font-size:clamp(24px,3vw,42px);line-height:1.02;letter-spacing:-.04em}
+.label{font-size:12px;text-transform:uppercase;letter-spacing:.12em;font-weight:900;color:#7a889b}
+h2{margin:6px 0 0;font-size:clamp(24px,3vw,40px);line-height:1.02;letter-spacing:-.04em}
 .tag{background:#edf5ff;color:#24435f;border-radius:999px;padding:10px 14px;font-size:12px;font-weight:900;text-transform:uppercase}
-.chart{
-  margin-top:18px;background:#fff;border:1px solid #e1e9f2;border-radius:26px;padding:18px;position:relative;overflow:hidden
+.small{margin-top:6px;font-size:14px;color:var(--muted)}
+.controls{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.controls button{
+  border:0;border-radius:999px;padding:11px 14px;font-weight:900;font-size:13px;cursor:pointer
 }
-.chart:before{
-  content:"";position:absolute;right:-90px;top:-80px;width:300px;height:300px;border-radius:50%;
-  background:radial-gradient(circle, rgba(10,132,255,.12), transparent 70%);
-}
-.axis{font-size:12px;color:#7b8798;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
-.rows{display:grid;gap:22px;margin-top:18px}
-.row{display:grid;grid-template-columns:220px 1fr 150px;align-items:center;gap:16px}
+.controls .play{background:#10233c;color:#fff}
+.controls .alt{background:#eef4fb;color:#17304d}
+.rows{display:grid;gap:18px;margin-top:18px}
+.row{display:grid;grid-template-columns:210px 1fr 145px;align-items:center;gap:14px}
 .name{font-size:15px;font-weight:900;color:#20344b;line-height:1.2}
-.track{height:62px;border-radius:18px;background:#edf3f9;position:relative;overflow:hidden;border:1px solid #e1e8f0}
+.track{height:58px;border-radius:18px;background:#edf3f9;border:1px solid #e1e8f0;overflow:hidden}
 .fill{
-  height:100%;width:0;border-radius:18px;position:relative;transition:width 1.3s cubic-bezier(.2,.9,.2,1);
-  box-shadow:0 14px 28px rgba(12,28,53,.16), inset 0 1px 0 rgba(255,255,255,.28); cursor:pointer
+  height:100%;width:0;border-radius:18px;transition:width 1.3s cubic-bezier(.2,.9,.2,1);
+  box-shadow:0 12px 24px rgba(12,28,53,.14), inset 0 1px 0 rgba(255,255,255,.28);
+  position:relative
 }
 .prov{background:linear-gradient(90deg,var(--prov),var(--prov2))}
 .exec{background:linear-gradient(90deg,#3ca7ff,#9ae0ff)}
 .reco{background:linear-gradient(90deg,var(--rec),var(--rec2))}
 .inVal{
-  position:absolute;right:14px;top:50%;transform:translateY(-50%);color:#fff;font-size:clamp(16px,2vw,28px);
-  font-weight:950;letter-spacing:-.04em;opacity:0;transition:opacity .35s ease .15s;text-shadow:0 2px 8px rgba(0,0,0,.25)
+  position:absolute;right:14px;top:50%;transform:translateY(-50%);
+  color:#fff;font-size:clamp(14px,1.8vw,24px);font-weight:950;letter-spacing:-.04em;
+  opacity:0;transition:opacity .35s ease .15s;text-shadow:0 2px 8px rgba(0,0,0,.25)
 }
 .fill.show .inVal{opacity:1}
-.outVal{font-size:clamp(20px,2.1vw,32px);font-weight:950;letter-spacing:-.04em;text-align:right}
-.outVal.provT{color:var(--prov)} .outVal.execT{color:#199fff} .outVal.recT{color:var(--rec)}
+.outVal{font-size:clamp(18px,2vw,30px);font-weight:950;letter-spacing:-.04em;text-align:right}
 .finding{
-  margin-top:22px;border-radius:24px;padding:18px 20px;background:#0e2037;color:#fff;
-  display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap
+  margin-top:18px;border-radius:22px;padding:16px 18px;background:var(--dark);color:#fff;
+  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap
 }
-.finding .label{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#a7bdd7;font-weight:900}
-.finding .big{font-size:clamp(34px,4.5vw,64px);font-weight:950;letter-spacing:-.05em;color:var(--gold);line-height:.95}
-.finding .small{font-size:16px;font-weight:800;color:#e0e8f4}
+.finding .t{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#a7bdd7;font-weight:900}
+.finding .big{font-size:clamp(32px,4.2vw,56px);font-weight:950;letter-spacing:-.05em;color:var(--gold);line-height:.95}
+.finding .desc{font-size:15px;font-weight:800;color:#e0e8f4}
 .origin{
-  margin-top:18px;background:#fff;border:1px solid #e1e9f2;border-radius:26px;padding:18px
+  margin-top:16px;padding-top:16px;border-top:1px solid var(--line)
 }
-.originHead{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;flex-wrap:wrap}
-.originHead h3{margin:0;font-size:22px}
-.originGrid{display:grid;grid-template-columns:1fr 220px;gap:18px;align-items:center;margin-top:12px}
+.originHead{font-size:18px;font-weight:900;margin-bottom:12px}
+.originGrid{display:grid;grid-template-columns:1fr 210px;gap:18px;align-items:center}
 .originBtns{display:flex;flex-wrap:wrap;gap:8px}
 .originBtns button{
-  background:#fff;border:1px solid #dde7f3;color:#17304d;border-radius:14px;padding:12px 14px;font-size:13px
+  background:#fff;border:1px solid #dde7f3;color:#17304d;border-radius:14px;padding:12px 14px;font-size:13px;font-weight:800;cursor:pointer
 }
 .originBtns button.active{background:#10233c;color:#fff;border-color:#10233c}
 .originDetail{
-  margin-top:14px;border-radius:20px;padding:16px;background:#10233c;color:#fff;
-  display:flex;align-items:center;justify-content:space-between;gap:14px;flex-wrap:wrap
+  margin-top:12px;border-radius:18px;padding:16px;background:#10233c;color:#fff;
+  display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap
 }
 .originDetail .t{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#a3b8d0;font-weight:900}
-.originDetail .v{font-size:clamp(24px,2.8vw,38px);font-weight:950;letter-spacing:-.04em}
-.originDetail .pct{font-size:clamp(24px,2.8vw,38px);font-weight:950;color:var(--gold)}
+.originDetail .v{font-size:clamp(22px,2.5vw,34px);font-weight:950;letter-spacing:-.04em}
+.originDetail .pct{font-size:clamp(22px,2.5vw,34px);font-weight:950;color:var(--gold)}
 .donut{
-  width:180px;height:180px;border-radius:50%;
+  width:170px;height:170px;border-radius:50%;
   background:conic-gradient(var(--prov) 0 73%, var(--prov2) 73% 97.6%, #d2e8ff 97.6% 100%);
   position:relative;margin:auto
 }
 .donut:after{
-  content:"FCM";position:absolute;inset:28px;background:#fff;border-radius:50%;
-  display:grid;place-items:center;color:#173150;font-size:28px;font-weight:950;box-shadow:0 0 0 1px #ebf1f7 inset;
+  content:"FCM";position:absolute;inset:26px;background:#fff;border-radius:50%;
+  display:grid;place-items:center;color:#173150;font-size:26px;font-weight:950;box-shadow:0 0 0 1px #ebf1f7 inset
 }
-.tooltip{
-  position:absolute;display:none;z-index:10;background:#081626;color:#fff;max-width:240px;
-  padding:10px 12px;border-radius:12px;font-size:12px;line-height:1.4;box-shadow:0 16px 36px rgba(0,0,0,.24)
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px}
+.compCard{
+  background:#fff;border:1px solid var(--line);border-radius:24px;padding:20px;position:relative;overflow:hidden
 }
+.compCard:before{
+  content:"";position:absolute;right:-65px;top:-65px;width:220px;height:220px;border-radius:50%;
+  background:radial-gradient(circle, rgba(10,132,255,.10), transparent 70%);
+}
+.compCard.rec:before{background:radial-gradient(circle, rgba(229,57,53,.09), transparent 70%)}
+.compName{font-size:14px;font-weight:900;text-transform:uppercase;letter-spacing:.08em}
+.bigNum{font-size:clamp(40px,6vw,76px);font-weight:950;letter-spacing:-.06em;line-height:.92;margin:12px 0 8px}
+.sub2{font-size:18px;font-weight:800}
+.spark{height:18px;background:#edf3f9;border:1px solid #e1e8f0;border-radius:999px;overflow:hidden;margin-top:16px}
+.ratioBox{
+  margin-top:18px;background:#fff;border:1px solid var(--line);border-radius:24px;padding:20px
+}
+.ratioTop{font-size:12px;color:#6f7d91;text-transform:uppercase;letter-spacing:.08em;font-weight:900}
+.ratioRow{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px}
+.unitLabel{font-size:14px;font-weight:900;min-width:110px}
+.unitOne{
+  width:58px;height:58px;border-radius:16px;background:linear-gradient(180deg,var(--rec2),var(--rec));
+  color:#fff;display:grid;place-items:center;font-size:19px;font-weight:950;box-shadow:0 10px 24px rgba(229,57,53,.20)
+}
+.units{
+  display:flex;gap:8px;flex-wrap:wrap;min-height:62px
+}
+.unit{
+  width:58px;height:58px;border-radius:16px;background:linear-gradient(180deg,var(--prov2),var(--prov));
+  color:#fff;display:grid;place-items:center;font-size:18px;font-weight:950;
+  transform:scale(0);transition:transform .35s cubic-bezier(.2,1.3,.3,1);
+  box-shadow:0 10px 24px rgba(10,132,255,.20)
+}
+.unit.part{width:20px}
+.units.show .unit{transform:scale(1)}
 .foot{margin-top:14px;font-size:12px;color:#6e7d91;line-height:1.45}
-@media(max-width:960px){
+@media(max-width:920px){
+  .grid2{grid-template-columns:1fr}
+  .originGrid{grid-template-columns:1fr}
+}
+@media(max-width:760px){
   .row{grid-template-columns:1fr;gap:8px}
   .outVal{text-align:left}
-  .originGrid{grid-template-columns:1fr}
 }
 </style>
 </head>
 <body>
 <div class="wrap">
   <section class="hero">
-    <div class="kicker">Visualización periodística</div>
-    <h1><span class="provT">Providencia</span> aporta más al FCM que todo el presupuesto de <span class="recT">Recoleta</span>.</h1>
-    <div class="btns">
-      <button class="b1" id="play">▶ Animar magnitud</button>
-      <button class="b2" id="findingBtn">★ Mostrar hallazgo</button>
-      <button class="b3" id="reset">↻ Reiniciar</button>
+    <div class="kicker">Especial de datos</div>
+    <h1><span class="provT">Providencia</span> vs <span class="recT">Recoleta</span></h1>
+    <div class="sub">Dos gráficos interactivos para mostrar la brecha presupuestaria entre comunas vecinas.</div>
+    <div class="nav">
+      <a href="#g1" class="btn1">Gráfico 1</a>
+      <a href="#g2" class="btn2">Gráfico 2</a>
+      <button class="btn3" id="playAll">▶ Animar todo</button>
     </div>
   </section>
 
-  <section class="main">
-    <div class="top">
-      <div>
-        <h2>Aporte de Providencia al FCM vs. presupuesto de Recoleta</h2>
+  <section class="section">
+    <article class="card" id="g1">
+      <div class="top">
+        <div>
+          <div class="label">Gráfico 1</div>
+          <h2>Aporte de Providencia al FCM vs. presupuesto de Recoleta</h2>
+          <div class="small">Comparación de magnitud · 2022</div>
+        </div>
+        <div class="tag">2022</div>
       </div>
-      <div class="tag">2022</div>
-    </div>
 
-    <div class="chart" id="chart">
-      <div class="tooltip" id="tooltip"></div>
-      <div class="axis">Comparación de magnitud · millones de pesos (M$)</div>
+      <div class="controls">
+        <button class="play" id="play1">Animar gráfico 1</button>
+        <button class="alt" id="reset1">Reiniciar</button>
+      </div>
 
       <div class="rows">
         <div class="row">
           <div class="name">Aporte Providencia al FCM</div>
-          <div class="track">
-            <div class="fill prov" id="barProv" data-width="84.19" data-title="Aporte Providencia al FCM" data-value="$50.515 millones">
-              <div class="inVal">$50.515</div>
-            </div>
-          </div>
-          <div class="outVal provT">$50.515</div>
+          <div class="track"><div class="fill prov" id="barProv"><div class="inVal">$50.515</div></div></div>
+          <div class="outVal" style="color:var(--prov)">$50.515</div>
         </div>
-
         <div class="row">
           <div class="name">Ejecución real Providencia</div>
-          <div class="track">
-            <div class="fill exec" id="barExec" data-width="83.36" data-title="Ejecución real Providencia" data-value="$50.014 millones">
-              <div class="inVal">$50.014</div>
-            </div>
-          </div>
-          <div class="outVal execT">$50.014</div>
+          <div class="track"><div class="fill exec" id="barExec"><div class="inVal">$50.014</div></div></div>
+          <div class="outVal" style="color:#1a9fff">$50.014</div>
         </div>
-
         <div class="row">
           <div class="name">Presupuesto total Recoleta</div>
-          <div class="track">
-            <div class="fill reco" id="barReco" data-width="72.19" data-title="Presupuesto total Recoleta" data-value="$43.314 millones">
-              <div class="inVal">$43.314</div>
-            </div>
-          </div>
-          <div class="outVal recT">$43.314</div>
+          <div class="track"><div class="fill reco" id="barReco"><div class="inVal">$43.314</div></div></div>
+          <div class="outVal" style="color:var(--rec)">$43.314</div>
         </div>
       </div>
 
-      <div class="finding" id="finding">
+      <div class="finding" id="finding1">
         <div>
-          <div class="label">Hallazgo principal</div>
-          <div class="small">Diferencia aproximada</div>
+          <div class="t">Hallazgo principal</div>
+          <div class="desc">Diferencia aproximada</div>
         </div>
         <div class="big">$7.201 millones</div>
       </div>
-    </div>
 
-    <div class="origin" id="origin">
-      <div class="originHead">
-        <h3>¿De dónde viene el aporte?</h3>
-      </div>
-      <div class="originGrid">
-        <div>
-          <div class="originBtns">
-            <button class="originBtn active" data-label="Patentes municipales" data-value="$36.782 millones" data-pct="73,0%">Patentes</button>
-            <button class="originBtn" data-label="Permisos de circulación" data-value="$12.424 millones" data-pct="24,6%">Permisos</button>
-            <button class="originBtn" data-label="Multas" data-value="$1.308 millones" data-pct="2,6%">Multas</button>
-          </div>
-          <div class="originDetail">
-            <div>
-              <div class="t" id="originLabel">Patentes municipales</div>
-              <div class="v" id="originValue">$36.782 millones</div>
+      <div class="origin">
+        <div class="originHead">¿De dónde viene el aporte?</div>
+        <div class="originGrid">
+          <div>
+            <div class="originBtns">
+              <button class="originBtn active" data-label="Patentes municipales" data-value="$36.782 millones" data-pct="73,0%">Patentes</button>
+              <button class="originBtn" data-label="Permisos de circulación" data-value="$12.424 millones" data-pct="24,6%">Permisos</button>
+              <button class="originBtn" data-label="Multas" data-value="$1.308 millones" data-pct="2,6%">Multas</button>
             </div>
-            <div class="pct" id="originPct">73,0%</div>
+            <div class="originDetail">
+              <div>
+                <div class="t" id="originLabel">Patentes municipales</div>
+                <div class="v" id="originValue">$36.782 millones</div>
+              </div>
+              <div class="pct" id="originPct">73,0%</div>
+            </div>
+          </div>
+          <div class="donut" aria-hidden="true"></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="card recGlow" id="g2">
+      <div class="top">
+        <div>
+          <div class="label">Gráfico 2</div>
+          <h2>Brecha presupuestaria per cápita</h2>
+          <div class="small">Comparación por habitante · 2022</div>
+        </div>
+        <div class="tag">2022</div>
+      </div>
+
+      <div class="controls">
+        <button class="play" id="play2">Animar gráfico 2</button>
+        <button class="alt" id="reset2">Reiniciar</button>
+      </div>
+
+      <div class="grid2">
+        <div class="compCard">
+          <div class="compName provT">Providencia</div>
+          <div class="bigNum provT counter" data-end="1189000">$0</div>
+          <div class="sub2">por habitante</div>
+          <div class="spark"><div class="fill prov" id="fillProv"></div></div>
+          <div class="small">Presupuesto: $174.795 millones · Población aprox.: 147.000</div>
+        </div>
+
+        <div class="compCard rec">
+          <div class="compName recT">Recoleta</div>
+          <div class="bigNum recT counter" data-end="274100">$0</div>
+          <div class="sub2">por habitante</div>
+          <div class="spark"><div class="fill reco" id="fillRec"></div></div>
+          <div class="small">Presupuesto: $43.314 millones · Población aprox.: 158.000</div>
+        </div>
+      </div>
+
+      <div class="ratioBox">
+        <div class="ratioTop">Visualización de la relación</div>
+        <div class="ratioRow">
+          <div class="unitLabel recT">Recoleta</div>
+          <div class="unitOne">1×</div>
+        </div>
+        <div class="ratioRow">
+          <div class="unitLabel provT">Providencia</div>
+          <div class="units" id="units">
+            <div class="unit">1</div>
+            <div class="unit">2</div>
+            <div class="unit">3</div>
+            <div class="unit">4</div>
+            <div class="unit part"></div>
           </div>
         </div>
-        <div class="donut" aria-hidden="true"></div>
       </div>
-    </div>
 
-    <div class="foot">Datos usados según tu referencia: aporte Providencia al FCM <strong>$50.515 millones</strong>, ejecución real Providencia <strong>$50.014 millones</strong> y presupuesto total Recoleta <strong>$43.314 millones</strong>.</div>
+      <div class="finding" id="finding2">
+        <div>
+          <div class="t">Hallazgo principal</div>
+          <div class="desc">Relación aproximada</div>
+        </div>
+        <div class="big">4,34 veces</div>
+      </div>
+    </article>
+
+    <div class="foot">Datos usados según tu referencia: aporte Providencia al FCM <strong>$50.515 millones</strong>, ejecución real Providencia <strong>$50.014 millones</strong>, presupuesto total Recoleta <strong>$43.314 millones</strong>, Providencia <strong>$1.189.000</strong> por habitante y Recoleta <strong>$274.100</strong> por habitante.</div>
   </section>
 </div>
 
 <script>
 const q=s=>document.querySelector(s), qa=s=>[...document.querySelectorAll(s)];
-const bars=[q('#barProv'),q('#barExec'),q('#barReco')];
-const tooltip=q('#tooltip'), chart=q('#chart');
 
-function animate(compare=true){
-  bars.forEach(b=>{b.style.width='0%';b.classList.remove('show')});
-  q('#finding').style.opacity = compare ? '0' : '1';
+function animate1(){
+  const data = [
+    [q('#barProv'), '84.19%'],
+    [q('#barExec'), '83.36%'],
+    [q('#barReco'), '72.19%']
+  ];
+  data.forEach(([el])=>{el.style.width='0%'; el.classList.remove('show')});
+  q('#finding1').style.opacity='0';
   setTimeout(()=>{
-    bars.forEach((b,i)=>setTimeout(()=>{b.style.width=b.dataset.width+'%';b.classList.add('show')},i*220));
-    if(compare){
-      setTimeout(()=>{q('#finding').style.opacity='1'},1100);
-    }
-  },50);
+    data.forEach(([el,w],i)=>setTimeout(()=>{el.style.width=w; el.classList.add('show')}, i*220));
+    setTimeout(()=>q('#finding1').style.opacity='1', 1000);
+  },60);
 }
-q('#play').onclick=()=>animate(true);
-q('#findingBtn').onclick=()=>{q('#finding').scrollIntoView({behavior:'smooth', block:'center'}); q('#finding').style.opacity='1';}
-q('#reset').onclick=()=>{bars.forEach(b=>{b.style.width='0%';b.classList.remove('show')});q('#finding').style.opacity='0';tooltip.style.display='none';}
+function reset1(){
+  [q('#barProv'),q('#barExec'),q('#barReco')].forEach(el=>{el.style.width='0%';el.classList.remove('show')});
+  q('#finding1').style.opacity='0';
+}
 
-bars.forEach(bar=>{
-  bar.onclick=(e)=>{
-    const r=chart.getBoundingClientRect();
-    tooltip.innerHTML='<strong>'+bar.dataset.title+'</strong><br>'+bar.dataset.value;
-    tooltip.style.display='block';
-    tooltip.style.left=Math.min(e.clientX-r.left+8,r.width-250)+'px';
-    tooltip.style.top=Math.max(10,e.clientY-r.top-60)+'px';
-  };
-});
-chart.onmouseleave=()=>tooltip.style.display='none';
+function fmt(n){ return '$' + Math.round(n).toLocaleString('es-CL'); }
+function animate2(){
+  qa('.counter').forEach(el=>{
+    el.textContent='$0';
+    const end=+el.dataset.end, start=performance.now(), dur=1400;
+    function tick(t){
+      const p=Math.min(1,(t-start)/dur), e=1-Math.pow(1-p,3);
+      el.textContent=fmt(end*e);
+      if(p<1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  });
+  q('#fillProv').style.width='0%';
+  q('#fillRec').style.width='0%';
+  q('#units').classList.remove('show');
+  q('#finding2').style.opacity='0';
+  setTimeout(()=>{
+    q('#fillProv').style.width='100%';
+    q('#fillRec').style.width='23.05%';
+  },120);
+  setTimeout(()=>q('#units').classList.add('show'), 700);
+  setTimeout(()=>q('#finding2').style.opacity='1', 1050);
+}
+function reset2(){
+  qa('.counter').forEach(el=>el.textContent='$0');
+  q('#fillProv').style.width='0%';
+  q('#fillRec').style.width='0%';
+  q('#units').classList.remove('show');
+  q('#finding2').style.opacity='0';
+}
+
+q('#play1').onclick=animate1;
+q('#reset1').onclick=reset1;
+q('#play2').onclick=animate2;
+q('#reset2').onclick=reset2;
+q('#playAll').onclick=()=>{ animate1(); setTimeout(animate2, 450); };
 
 qa('.originBtn').forEach(btn=>{
   btn.onclick=()=>{
@@ -244,7 +376,7 @@ qa('.originBtn').forEach(btn=>{
   };
 });
 
-window.onload=()=>animate(true);
+window.onload=()=>{ animate1(); setTimeout(animate2, 500); };
 </script>
 </body>
 </html>
